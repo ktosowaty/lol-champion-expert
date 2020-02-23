@@ -1,0 +1,470 @@
+package pl.edu.wat.wcy
+
+import pl.edu.wat.wcy.Main.*;
+import java.util.List;
+import java.util.ArrayList
+import pl.edu.wat.wcy.QuestionType;
+
+query "Display"
+    q : Display();
+end
+
+rule "Stealth"
+    when
+    	q : Display();
+    	not Question (text == "Stealth");
+    then
+    	insert(new Question ("Stealth"));
+        q.setResult ("Should your champion have a stealth ability?", "Stealth", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Spells source"
+    when
+        q : Display();
+        not Question (text == "Spells source");
+    then
+       	insert(new Question ("Spells source"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Energy");
+       		variants.add("Mana");
+       		variants.add("None");
+           q.setResult ("What is your preferred spells source?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Champion type"
+    when
+        q : Display();
+        not Question (text == "Champion type");
+    then
+       	insert(new Question ("Champion type"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Mage");
+       		variants.add("Assasin");
+       		variants.add("Marksman");
+       		variants.add("Tank");
+       		variants.add("Bruiser");
+           q.setResult ("What is your preferred champion type?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Heal reduction"
+    when
+    	q : Display();
+    	not Question (text == "Heal reduction");
+    then
+    	insert(new Question ("Heal reduction"));
+        q.setResult ("Should your champion have healing reduction ability?", "Heal reduction", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "True damage"
+    when
+    	q : Display();
+    	not Question (text == "True damage");
+    then
+    	insert(new Question ("True damage"));
+        q.setResult ("Should your champion have an ability to deal true damage?", "True damage", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Percentage damage"
+    when
+    	q : Display();
+    	not Question (text == "Percentage damage");
+    then
+    	insert(new Question ("Percentage damage"));
+        q.setResult ("Should your champion have an ability to deal percentage damage?", "Percentage damage", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Ally buff"
+    when
+    	q : Display();
+    	not Question (text == "Ally buff");
+    then
+    	insert(new Question ("Ally buff"));
+        q.setResult ("Should your champion have an ability to buff your allies?", "Ally buff", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Self shield"
+    when
+    	q : Display();
+    	not Question (text == "Self shield");
+    then
+    	insert(new Question ("Self shield"));
+        q.setResult ("Should your champion have an ability to self shield?", "Self shield", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Engage"
+    when
+    	q : Display();
+    	not Question (text == "Engage");
+    then
+    	insert(new Question ("Engage"));
+        q.setResult ("Should your champion have an engage ability?", "Engage", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Gap closer"
+    when
+    	q : Display();
+    	not Question (text == "Gap closer");
+    then
+    	insert(new Question ("Gap closer"));
+        q.setResult ("Should your champion have a gap closer ability?", "Gap closer", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Crowd control"
+    when
+    	q : Display();
+    	not Question (text == "Crowd control");
+    then
+    	insert(new Question ("Crowd control"));
+        q.setResult ("Should your champion have a crowd control ability?", "Crowd control", QuestionType.YES_NO);
+    	retract(q);
+end
+
+rule "Power spike"
+    when
+        q : Display();
+        not Question (text == "Power spike");
+    then
+       	insert(new Question ("Power spike"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Early game");
+       		variants.add("Mid game");
+       		variants.add("Late game");
+           q.setResult ("When should your champion be strong?", "", QuestionType.MULTI_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Damage type"
+    when
+        q : Display();
+        not Question (text == "Damage type");
+    then
+       	insert(new Question ("Damage type"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Attack damage based");
+       		variants.add("Ability power based");
+       		variants.add("Mixed");
+           q.setResult ("What is your preferred damage type?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Range"
+    when
+        q : Display();
+        not Question (text == "Range");
+    then
+       	insert(new Question ("Range"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Melee");
+       		variants.add("Ranged");
+           q.setResult ("Do you want to play melee or ranged champion?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Champion level"
+    when
+        q : Display();
+        not Question (text == "Champion level");
+    then
+       	insert(new Question ("Champion level"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Easy");
+       		variants.add("Medium");
+       		variants.add("Hard");
+           q.setResult ("How hard should be your champion?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Position"
+    when
+        q : Display();
+        not Question (text == "Position");
+    then
+       	insert(new Question ("Position"));
+       	List<String> variants = new ArrayList<>();
+       		variants.add("Top");
+       		variants.add("Jungle");
+       		variants.add("Mid");
+       		variants.add("Bot");
+       		variants.add("Support");
+           q.setResult ("What is your preferred position?", "", QuestionType.SINGLE_CHOICE, variants);
+       	retract(q);
+end
+
+rule "Non existent" salience -1
+	when
+		q : Display();
+    then
+    	q.setResult ("Champion with given attributes doesn't exist!", true);
+    	retract(q);
+end
+
+rule "Annie"
+	when
+		q : Display();
+        (or
+            Attribute(content == "Mid");
+            Attribute(content == "Support");)
+        Attribute(content == "Easy");
+        Attribute(content == "Ranged");
+        Attribute(content == "Ability power based");
+        Attribute(content == "Mid game");
+        Attribute(content == "Engage");
+        Attribute(content == "Mage");
+        Attribute(content == "Mana");
+    then
+    	q.setResult ("Annie", true);
+    	retract(q);
+end
+
+rule "Anivia"
+	when
+		q : Display();
+        Attribute(content == "Mid");
+        Attribute(content == "Easy");
+        Attribute(content == "Ranged");
+        Attribute(content == "Ability power based");
+        (or
+            Attribute(content == "Mid game");
+            Attribute(content == "Late game");)
+
+        Attribute(content == "Mage");
+        Attribute(content == "Mana");
+    then
+    	q.setResult ("Anivia", true);
+    	retract(q);
+end
+
+rule "Ashe"
+	when
+		q : Display();
+		Attribute(content == "Bot");
+		Attribute(content == "Easy");
+		Attribute(content == "Ranged");
+		Attribute(content == "Attack damage based");
+		(or
+		    Attribute(content == "Early game");
+            Attribute(content == "Mid game");)
+        Attribute(content == "Engage");
+        Attribute(content == "Marksman");
+        Attribute(content == "Mana");
+    then
+    	q.setResult ("Ashe", true);
+    	retract(q);
+end
+
+rule "Evelynn"
+	when
+		q : Display();
+		Attribute(content == "Jungle");
+		Attribute(content == "Medium");
+		Attribute(content == "Melee");
+		Attribute(content == "Ability power based");
+		(or
+            Attribute(content == "Mid game");
+            Attribute(content == "Late game");)
+        Attribute(content == "Gap closer");
+        Attribute(content == "Percentage damage");
+        Attribute(content == "Assasin");
+        Attribute(content == "Mana");
+        Attribute(content == "Stealth");
+    then
+    	q.setResult ("Evelynn", true);
+    	retract(q);
+end
+
+rule "Vayne"
+	when
+		q : Display();
+		Attribute(content == "Bot");
+		Attribute(content == "Hard");
+		Attribute(content == "Ranged");
+		Attribute(content == "Attack damage based");
+		(or
+            Attribute(content == "Mid game");
+            Attribute(content == "Late game");)
+        Attribute(content == "Gap closer");
+        Attribute(content == "Percentage damage");
+        Attribute(content == "True damage");
+        Attribute(content == "Marksman");
+        Attribute(content == "Mana");
+        Attribute(content == "Stealth");
+    then
+    	q.setResult ("Vayne", true);
+    	retract(q);
+end
+
+rule "Yasuo"
+	when
+		q : Display();
+		(or
+		    Attribute(content == "Mid");
+		    Attribute(content == "Top");)
+		Attribute(content == "Hard");
+		Attribute(content == "Melee");
+		Attribute(content == "Attack damage based");
+		(or
+            Attribute(content == "Mid game");
+            Attribute(content == "Late game");)
+        Attribute(content == "Gap closer");
+        Attribute(content == "Engage");
+		Attribute(content == "Self shield");
+		Attribute(content == "Bruiser");
+        Attribute(content == "None");
+    then
+    	q.setResult ("Yasuo", true);
+    	retract(q);
+end
+
+rule "Sion"
+	when
+		q : Display();
+		Attribute(content == "Top");
+		Attribute(content == "Easy");
+		Attribute(content == "Melee");
+		Attribute(content == "Attack damage based");
+		Attribute(content == "Mid game");
+		Attribute(content == "Gap closer");
+		Attribute(content == "Engage");
+		Attribute(content == "Self shield");
+        Attribute(content == "Percentage damage");
+        Attribute(content == "Tank");
+		Attribute(content == "Mana");
+    then
+    	q.setResult ("Sion", true);
+    	retract(q);
+end
+
+rule "Yuumi"
+	when
+		q : Display();
+		Attribute(content == "Support");
+		Attribute(content == "Easy");
+		Attribute(content == "Ranged");
+		Attribute(content == "Ability power based");
+		(or
+            Attribute(content == "Mid game");
+            Attribute(content == "Late game");)
+        Attribute(content == "Engage");
+		Attribute(content == "Self shield");
+		Attribute(content == "Ally buff");
+		Attribute(content == "Mage");
+		Attribute(content == "Mana");
+    then
+    	q.setResult ("Yuumi", true);
+    	retract(q);
+end
+
+rule "Ezreal"
+	when
+		q : Display();
+		Attribute(content == "Bot");
+		Attribute(content == "Hard");
+		Attribute(content == "Ranged");
+		Attribute(content == "Mixed");
+		Attribute(content == "Mid game");
+		Attribute(content == "Gap closer");
+		Attribute(content == "Marksman");
+		Attribute(content == "Mana");
+    then
+    	q.setResult ("Ezreal", true);
+    	retract(q);
+end
+
+rule "Draven"
+	when
+		q : Display();
+		Attribute(content == "Bot");
+		Attribute(content == "Hard");
+		Attribute(content == "Ranged");
+		Attribute(content == "Attack damage based");
+		(or
+            Attribute(content == "Early game");
+            Attribute(content == "Mid game");)
+        Attribute(content == "Marksman");
+        Attribute(content == "Mana");
+    then
+    	q.setResult ("Draven", true);
+    	retract(q);
+end
+
+rule "Olaf"
+	when
+		q : Display();
+		Attribute(content == "Jungle");
+		Attribute(content == "Easy");
+		Attribute(content == "Melee");
+		Attribute(content == "Attack damage based");
+		Attribute(content == "Early game");
+		Attribute(content == "True damage");
+		Attribute(content == "Bruiser");
+		Attribute(content == "Mana");
+    then
+    	q.setResult ("Olaf", true);
+    	retract(q);
+end
+
+rule "Jinx"
+	when
+		q : Display();
+		Attribute(content == "Bot");
+		Attribute(content == "Easy");
+		Attribute(content == "Ranged");
+		Attribute(content == "Attack damage based");
+		Attribute(content == "Late game");
+		Attribute(content == "Marksman");
+		Attribute(content == "Mana");
+    then
+    	q.setResult ("Jinx", true);
+    	retract(q);
+end
+
+rule "Lee sin"
+	when
+		q : Display();
+		Attribute(content == "Jungle");
+		Attribute(content == "Hard");
+		Attribute(content == "Melee");
+		Attribute(content == "Attack damage based");
+		Attribute(content == "Early game");
+		Attribute(content == "Gap closer");
+		Attribute(content == "Engage");
+		Attribute(content == "Self shield");
+		Attribute(content == "Ally buff");
+		Attribute(content == "Bruiser");
+		Attribute(content == "Energy");
+    then
+    	q.setResult ("Lee sin", true);
+    	retract(q);
+end
+
+rule "Kled"
+	when
+		q : Display();
+		Attribute(content == "Top");
+		Attribute(content == "Medium");
+		Attribute(content == "Melee");
+		Attribute(content == "Attack damage based");
+		(or
+            Attribute(content == "Early game");
+            Attribute(content == "Mid game");)
+        Attribute(content == "Gap closer");
+        Attribute(content == "Engage");
+        Attribute(content == "Ally buff");
+        Attribute(content == "Percentage damage");
+        Attribute(content == "Heal reduction");
+        Attribute(content == "Bruiser");
+        Attribute(content == "None");
+    then
+    	q.setResult ("Kled", true);
+    	retract(q);
+end
